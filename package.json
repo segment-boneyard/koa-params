@@ -14,5 +14,8 @@
     "mocha": "~1.17.0",
     "koa-route": "~1.0.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "make test"
+  }
 }

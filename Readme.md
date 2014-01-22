@@ -4,6 +4,8 @@
   Add express style [params](http://expressjs.com/api.html#app.param)
 support to [koa-route](https://github.com/koajs/route).
 
+  [![build status](https://secure.travis-ci.org/segmentio/koa-params.png)](http://travis-ci.org/segmentio/koa-params)
+
 ## Example
 
 ```js
