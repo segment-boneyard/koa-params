@@ -1,0 +1,18 @@
+{
+  "name": "koa-params",
+  "version": "1.0.0",
+  "description": "Add express style params support to koa",
+  "repository": "segmentio/koa-params",
+  "dependencies": {
+    "path-to-regexp": "0.0.2",
+    "koa-compose": "~2.1.0",
+    "debug": "~0.7.4"
+  },
+  "devDependencies": {
+    "koa": "~0.3.0",
+    "supertest": "~0.9.0",
+    "mocha": "~1.17.0",
+    "koa-route": "~1.0.2"
+  },
+  "license": "MIT"
+}
