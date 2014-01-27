@@ -50,7 +50,11 @@ function paramify(route){
             var inner = fns[key.name].map(function(_fn){
               return function*(_next){
                 debug('resolve %s:%s', key.name, args[i]);
-                yield _fn.call(ctx, args[i], _next);
+                if (2 == _fn.length) {
+                  yield _fn.call(ctx, args[i], _next);
+                } else {
+                  yield _fn.call(ctx, _next);
+                }
               };
             });
             

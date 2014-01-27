@@ -57,11 +57,11 @@ $ npm install koa-params
 
 ### route.param(param, fn)
 
-  When a route contains `:param`, call `fn` with its value and wait for it to
-yield until the real route handler is called - unless you don't yield and the
-response ends.
+  When a route contains `:param`, call `fn` with its value and `next`. Wait for it to yield before continuing with the real route handler - unless you don't yield and the response ends.
 
   You can register multiple `fns` per `param`, just as with express.
+  
+  `fn` can be koa middleware too, when `fn` only takes one argument, `next` will be supplied.
 
 ## License
 

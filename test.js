@@ -104,6 +104,26 @@ describe('paramify', function(){
     .expect(404, done);
   });
   
+  it('should accept middleware', function(done){
+    var app = koa();
+    var _ = paramify(route);
+    _.param('user', function*(id, next){
+      this.user = 'julian';
+      yield next;
+    });
+    _.param('user', function*(next){
+      this.user = this.user.toUpperCase();
+      yield next;
+    });
+    app.use(_.get('/:user', function*(){
+      this.body = this.user;
+    }));
+    
+    request(app.listen())
+    .get('/julian')
+    .expect('JULIAN', done);
+  });
+  
   it('should clone', function(){
     assert(route != paramify(route));
   });
