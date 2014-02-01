@@ -4,7 +4,6 @@
  */
 
 var pathToRegexp = require('path-to-regexp');
-var compose = require('koa-compose');
 var debug = require('debug')('koa-params');
 
 /**
@@ -33,49 +32,21 @@ function paramify(route){
   Object.keys(route).forEach(function(method){
     ret[method] = function(path, fn){
       var keys = [];
-      var re = pathToRegexp(path, keys);
+      var regexp = pathToRegexp(path, keys);
       
-      return route[method](re, function*(){
+      return route[method](regexp, function*(){
         var args = slice.call(arguments);
-        var ctx = this;
         
-        // outer loop - iterate over params
-        var outer = keys
-        .filter(function(key){
-          return !!fns[key.name];
-        })
-        .map(function(key, i){
-          return function*(next){   
-            // inner loop - iterate over param's fns
-            var inner = fns[key.name].map(function(_fn){
-              return function*(_next){
-                debug('resolve %s:%s', key.name, args[i]);
-                if (2 == _fn.length) {
-                  yield _fn.call(ctx, args[i], _next);
-                } else {
-                  yield _fn.call(ctx, _next);
-                }
-              };
-            });
-            
-            inner.push(function*(){
-              // param's fns finished, continue with next param
-              yield next;
-            });
-            
-            yield compose(inner);
-          };
-        });
+        for (var i = 0; i < keys.length; i++) {
+          var param = keys[i].name;
+          var arr = fns[param];
+          if (!arr) continue;
+          for (var j = 0; j < arr.length; j++) {
+            yield arr[j].call(this, args[i]);
+          }
+        }
         
-        // no param fns, call route fn
-        if (!outer.length) return yield fn.apply(ctx, args);
-        
-        outer.push(function*(_next){
-          // all params' fns finished, call route fn
-          yield fn.apply(ctx, args);
-        });
-        
-        return yield compose(outer);
+        yield fn.apply(this, arguments);
       });
     };
   });

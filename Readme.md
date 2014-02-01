@@ -25,11 +25,10 @@ var users = {
   'badguy': { name: 'Bad Guy', fun: false }
 };
 
-param('user', function*(id, next){
+param('user', function*(id){
   var user = users[id];
-  if (!user) return this.status = 404;
+  if (!user) this.throw(404);
   this.user = user;
-  yield next;
 });
 
 app.use(get('/', function*(){
@@ -57,11 +56,9 @@ $ npm install koa-params
 
 ### route.param(param, fn)
 
-  When a route contains `:param`, call `fn` with its value and `next`. Wait for it to yield before continuing with the real route handler - unless you don't yield and the response ends.
+  When a route contains `:param`, call `fn` with its value. Wait for it to finish before continuing with the real route handler.
 
   You can register multiple `fns` per `param`, just as with express.
-  
-  `fn` can be koa middleware too, when `fn` only takes one argument, `next` will be supplied.
 
 ## License
 
